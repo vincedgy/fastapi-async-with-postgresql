@@ -31,7 +31,7 @@ Used main libraries :
 - [colorama](https://pypi.org/project/colorama/)
 
 
-Obviously you'll need a postgresql database.
+Obviously you'll need a postgresql database, but we will have some help with docker.
 
 We'll be using [locust](https://locust.io) for performance/load testing.
 
@@ -52,7 +52,7 @@ python3 -m poetry shell
 
 ## Install Postgresql
 
-For this we use docker (choose he appropriate docker desktop for you local OS) with the help of docker-compose.
+For this we use docker (choose the appropriate docker desktop for you local OS) with the help of docker-compose.
 
 Please refer to the official documentation of docker and docker-compose for your environment.
 

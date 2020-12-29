@@ -47,6 +47,31 @@ async def create_note(note: NoteIn):
     return {**note.dict(), "id": last_record_id}
 
 
+@app.put("/notes/{note_id}", response_model=Note)
+async def update_note(note_id: int, payload: NoteIn):
+    """Update one note given its id"""
+    query = notes.select().where(text(f"id={note_id}"))
+    row = await database.fetch_one(query=query)
+    if row is None:
+        logger.info("No record !")
+        raise HTTPException(
+            status_code=404,
+            detail="Item not found",
+            headers={"X-Error": f"Request asked for note id: [{note_id}]"}
+        )
+    query = notes.update().where(notes.c.id == note_id).values(text=payload.text, completed=payload.completed)
+    await database.execute(query=query)
+    return {**payload.dict(), "id": note_id}
+
+
+@app.delete("/notes/{note_id}")
+async def delete_note(note_id: int):
+    """Delete one note given its id"""
+    query = notes.delete().where(notes.c.id == note_id)
+    await database.execute(query=query)
+    return {}
+
+
 @app.get("/notes/all", response_model=List[Note])
 async def get_all_notes():
     """Fetch all notes at once"""

@@ -20,6 +20,6 @@ notes: sqlalchemy.sql.schema.Table = sqlalchemy.Table(
 
 logging.info("Creating schema")
 
-engine: Engine = sqlalchemy.create_engine(db_url, pool_size=3, max_overflow=0)
+engine: Engine = sqlalchemy.create_engine(db_url, pool_size=3, max_overflow=0, echo=True)
 metadata.create_all(engine)
 
