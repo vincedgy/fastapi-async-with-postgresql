@@ -16,9 +16,9 @@ db_url = f"postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}?sslmod
 
 logging = get_logger(name='db_utils')
 logging.info(
-    f"Defining configuration for db at [postgresql://{db_user}:****@{db_host}:{db_port}/{db_name}?ssl_mode={ssl_mode}]")
+    f"Defining configuration for db at [postgresql://{db_user}:****@{db_host}:{db_port}/{db_name}?sslmode={ssl_mode}]")
 
 database: Database = Database(db_url,
-                              # ssl=True,
+                              #ssl=True,
                               min_size=5,
                               max_size=20)
