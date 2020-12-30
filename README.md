@@ -1,3 +1,5 @@
+![Install_And_Publish_Docs](https://github.com/vincedgy/fastapi-async-with-postgresql/workflows/Install_And_Publish_Docs/badge.svg)
+
 # FastAPI async with Postgresql DB #
 
 > Author : @vincedgy

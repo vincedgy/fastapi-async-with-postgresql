@@ -1,4 +1,4 @@
-name: ci
+name: Install_And_Publish_Docs
 on:
   push:
     branches:
