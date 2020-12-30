@@ -56,7 +56,7 @@ async def create_note(note: NoteIn):
 @app.put("/notes/{note_id}", response_model=Note)
 async def update_note(note_id: int, payload: NoteIn):
     """Update one note given its id"""
-    query = notes.select().where(text(f"id={note_id}"))
+    query = notes.select().where(notes.c.id == note_id)
     row = await database.fetch_one(query=query)
     if row is None:
         logger.info("No record !")
@@ -97,7 +97,7 @@ async def get_notes(skip: int = 0, take: int = 20):
 @app.get("/notes/{note_id}", response_model=Note, description="Fetch one Note given the note_id")
 async def get_one_note_by_id(note_id: int):
     """Fetch one Note given the note_id"""
-    query = notes.select().where(text(f"id={note_id}"))
+    query = notes.select().where(notes.c.id == note_id)
     row = await database.fetch_one(query=query)
     if row is None:
         logger.info("No record !")

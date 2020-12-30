@@ -1,7 +1,9 @@
 site_name: FastAPI with async and Postgresql
-site_url: https://vincedgy.github.io/first_mkdocs/
+site_url: https://vincedgy.github.io/fastapi-async-with-postgresql/
+site_author: vincedgy
+copyright: MIT
 
-repo_url: https://github.com/vincedgy/first_mkdocs
+repo_url: https://github.com/vincedgy/fastapi-async-with-postgresql
 edit_uri: tree/main/docs
 repo_name: GitHub
 
@@ -9,7 +11,7 @@ nav:
     - Home: index.md
     - About: about.md
 theme:
-    name: readthedocs
+    name: mkdocs
     extra_css:
         - css/extra.css
     highlightjs: true
