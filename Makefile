@@ -7,7 +7,7 @@
 .DEFAULT_GOAL = help
 
 # Server status evaluation
-SERVER_PID := $(shell sh -c "ps | grep -v grep | grep 'src/main.py' | head -1 | cut -d \t -f1")
+SERVER_PID := $(shell sh -c "ps | grep -v grep | grep 'main.py' | head -1 | cut -d \t -f1")
 ifeq ('$(strip $(SERVER_PID))','')
 		SERVER_RUNNING=FALSE
 else
@@ -28,7 +28,7 @@ help:
 	@echo "- Setup the project : make install"
 	@echo "- Run the server (blocking):  make start"
 	@echo "- Evaluate status of the server :  make status"
-	@echo "- Stop (killp) the server :  make kill"
+	@echo "- Stop (kill) the server :  make kill"
 	@echo "- Run tests on a running server: make tests"
 	@echo "------------------------------------"
 
@@ -40,11 +40,13 @@ status:
 	@echo "Running status of server is $(SERVER_RUNNING)"
 	@echo "Running status of child runners is $(HAVE_CHILD)"
 
-do_stop_server:
+kill: status
+	@echo "Killing process $(SERVER_PID)"
 	@-kill -9 $(SERVER_PID)
-do_stop_children:
+	@sleep 1
+	@echo "Killing process $(CHILD_PID)"
 	@-kill -9 $(CHILD_PID)
-kill: status do_stop_server do_stop_children
+	@sleep 1
 	@echo "Killing server on PID $(SERVER_PID) and children on PID $(CHILD_PID)"
 	@-lsof -i tcp:5000
 
@@ -57,6 +59,8 @@ do_start:
 start: do_start
 	@echo Check run.log for logging
 
+run:
+	@poetry run python src/main.py
 
 tests: install
 	@poetry run pytest
