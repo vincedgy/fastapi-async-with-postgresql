@@ -1,9 +1,15 @@
-# FastAPI async with Postgresql DB #
+# FastAPI, asyncio with Postgresql #
 
 > Author : @vincedgy
 
-This documentation uses the excellent `mkdocs` static website for technica documentation that you can find
-at [mkdocs.org](https://www.mkdocs.org).
+!!! Note
+
+    This documentation uses the excellent `mkdocs` technical documentation static website generator that you can find
+    at [mkdocs.org](https://www.mkdocs.org).
+
+You'll find the repository
+at [https://github.com/vincedgy/fastapi-async-with-postgresql](https://github.com/vincedgy/fastapi-async-with-postgresql)
+
 
 ---
 
@@ -35,33 +41,43 @@ The code hase been developed and tested with Python 3.9.1. It is probably ok wit
 
 ### Package manager
 
-this project use [Poetry](https://python-poetry.org/).
+This project use the marvelous [Poetry](https://python-poetry.org/) package manager and builder.
 
 It handles dependencies management, locking version and publishing to pypi automagically.
 
-### Main libraries
+It eases your day to day Python development projects with a lot a easy command to install a virtual environment and
+manage dependencies in a very secured way.
 
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [uvicorn](https://www.uvicorn.org/)
-- [pydantic](https://pydantic-docs.helpmanual.io/)
-- [Databases](https://pypi.org/project/databases/)
-- [colorama](https://pypi.org/project/colorama/)
+### Project's main libraries
+
+This project put together a lot a of great Python libs :
+
+- [FastAPI](https://fastapi.tiangolo.com/) : the blasting fast REST API framework
+- [uvicorn](https://www.uvicorn.org/) : the bullet speed ASGI server of reference
+- [pydantic](https://pydantic-docs.helpmanual.io/) : the great shema manager
+- [Databases](https://pypi.org/project/databases/) : the defacto asyncio lib for many SQL Databases
+- [colorama](https://pypi.org/project/colorama/) : the best color'ish lib ever
+
+### Other needs...
 
 Obviously you'll need a postgresql database, but we will have some help with docker if you don't have postgresql 9+
 installed locally on your machine.
 
-We'll be using [locust](https://locust.io) for performance/load testing.
+### But also...
+
+We'll be using the incredible easy to use  [locust](https://locust.io) for performance/load testing.
 
 
 --- 
 
 ## Automation with Makefile
 
-A `Makefile` automates all common commands for you.
+A `Makefile` automates all the commands you need for you.
 
 You'll find description of every command by typing `make help`.
 
 ```shell
+$ make help
 Wed Dec 30 21:58:56 CET 2020
                                    
    __  __     ______     __         ______    
@@ -89,32 +105,35 @@ Enjoy 🍺 !
 
 ## Install dependencies
 
-Using poetry its :
+Using poetry it's like :
 
 ```shell
 python3 -m poetry install
 ```
 
-Using Makefile commands
+You can also use `Makefile` commands, like :
 
 ```shell
 make install
 ```
 
-Then activate the shell
+Then, you should activate the shell
 
 ```shell
 python3 -m poetry shell
 ```
 
+From this point you can use the IDE of your choice.
+
 ----
 
 ## Run Postgresql with Docker
 
-If you don't have a local postgresql instance on your machine you can use the provided `docker-compose` stack.
+If you don't have any local [postgresql](https://www.postgresql.org) instance on your local machine, you can use the
+provided `docker-compose` stack.
 
-Of course, you'll need to choose the appropriate docker installation (docker desktop for you local OS) and install
-the `docker-compose` utility tool as well
+Of course, you'll need to choose the appropriate `docker` installation (you should install the proper `docker desktop`
+for your local OS) and install the `docker-compose` utility tool as well
 
 !!! Note
 
@@ -125,7 +144,7 @@ the `docker-compose` utility tool as well
 Launch the docker-compose stack like so :
 
 ```shell
-docker-compose up -d
+$ docker-compose up -d
 Starting fastapi-async-with-postgresql_adminer_1 ... done
 Recreating fastapi-async-with-postgresql_db_1    ... done
 ```
@@ -135,7 +154,7 @@ Recreating fastapi-async-with-postgresql_db_1    ... done
 You can check if the stack is up and running :
 
 ```shell
-docker-compose ps
+$ docker-compose ps
                  Name                                Command               State           Ports
 ---------------------------------------------------------------------------------------------------------
 fastapi-async-with-postgresql_adminer_1   entrypoint.sh docker-php-e ...   Up      0.0.0.0:8080->8080/tcp
@@ -147,7 +166,7 @@ fastapi-async-with-postgresql_db_1        docker-entrypoint.sh postgres    Up   
 From this point you should be able to log on your database with the help of psql also with docker :
 
 ```shell
-docker run -it --rm --network fastapi-async-with-postgresql_default postgres psql -h db -U vincent -d dev
+$ docker run -it --rm --network fastapi-async-with-postgresql_default postgres psql -h db -U vincent -d dev
 Password for user vincent:
 psql (13.1 (Debian 13.1-1.pgdg100+1))
 Type "help" for help.
@@ -172,8 +191,10 @@ dev=# \l
 
 `docker-compose.yml` file runs [adminer](https://www.adminer.org), a great php tool for db navigation.
 
-You should open the url http://localhost:8080/?pgsql=db&username=vincent&db=vincent&ns=public&select=notes
-and see the content of the "notes" table.
+You should open the
+url [http://localhost:8080/?pgsql=db&username=vincent&db=vincent&ns=public&select=notes](http://localhost:8080/?pgsql=db&username=vincent&db=vincent&ns=public&select=notes)
+
+Adminer will display the content of the "notes" table that the project uses.
 
 ![adminer]
 
@@ -181,10 +202,12 @@ and see the content of the "notes" table.
 
 ## Run the server
 
+You can start the server with `make run`
+
 If you had activate poetry shell you should be able to launch the server with
 
 ```shell
-python src/main.py
+$ make run
 2020-12-30 10:17:42,350:INFO:db_utils:Defining configuration for db at [postgresql://vincent:****@localhost:5432/vincent?sslmode=prefer]
 2020-12-30 10:17:42,423:INFO:schema:Defining table 'notes'
 2020-12-30 10:17:42,424:INFO:schema:Creating schema
@@ -289,6 +312,25 @@ INFO:     Stopping reloader process [8791]
 
 ---
 
+## API Documentation
+
+API's documentation is autogenerated with the help of FastAPI framework.
+
+FastAPI build automagicaly an [OpenAPI v3](https://swagger.io/specification/) documentation JSON file that is served
+with a local Web site at [http://localhost:5000/docs](http://localhost:5000/docs).
+
+![openapi]
+
+It also provides the excellent [redoc](https://github.com/Redocly/redoc) that present ths OpenAPI v3 in a very neat way
+at [http://localhost:5000/redoc](http://localhost:5000/redoc).
+
+![redoc]
+
+This documentation is incredibly useful when you have to verify your API endpoints during development.
+
+
+---
+
 ## Test the server
 
 You can use curl or whatever client for REST API
@@ -327,27 +369,27 @@ Once you have your database up and running you should be able to launche all the
 the Makefile command `make tests`.
 
 ```shell
-    make tests
-    ===================================================================================== test session starts ======================================================================================
-    platform darwin -- Python 3.9.1, pytest-5.4.3, py-1.10.0, pluggy-0.13.1 -- /Users/vdagoury/Library/Caches/pypoetry/virtualenvs/api-sK0lnS2G-py3.9/bin/python
-    cachedir: .pytest_cache
-    rootdir: /Users/vdagoury/Projects/Python/asynchronous/fastapi-async-with-postgresql
-    collected 11 items                                                                                                                                                                             
-    
-    src/tests/test_api.py::test_version PASSED
-    src/tests/test_api.py::test_create_note PASSED
-    src/tests/test_api.py::test_known_note PASSED
-    src/tests/test_api.py::test_get_all_notes PASSED
-    src/tests/test_api.py::test_update_note PASSED
-    src/tests/test_api.py::test_get_notes PASSED
-    src/tests/test_api.py::test_get_notes_with_pagination [{'id': 1, 'text': 'test', 'completed': False}]
-    PASSED
-    src/tests/test_api.py::test_delete_note PASSED
-    src/tests/test_api.py::test_unknown_note PASSED
-    src/tests/test_api.py::test_create_another_note PASSED
-    src/tests/test_api.py::test_get_one_note PASSED
-    
-    ====================================================================================== 11 passed in 0.18s ======================================================================================
+$ make tests
+===================================================================================== test session starts ======================================================================================
+platform darwin -- Python 3.9.1, pytest-5.4.3, py-1.10.0, pluggy-0.13.1 -- /Users/vdagoury/Library/Caches/pypoetry/virtualenvs/api-sK0lnS2G-py3.9/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/vdagoury/Projects/Python/asynchronous/fastapi-async-with-postgresql
+collected 11 items                                                                                                                                                                             
+
+src/tests/test_api.py::test_version PASSED
+src/tests/test_api.py::test_create_note PASSED
+src/tests/test_api.py::test_known_note PASSED
+src/tests/test_api.py::test_get_all_notes PASSED
+src/tests/test_api.py::test_update_note PASSED
+src/tests/test_api.py::test_get_notes PASSED
+src/tests/test_api.py::test_get_notes_with_pagination [{'id': 1, 'text': 'test', 'completed': False}]
+PASSED
+src/tests/test_api.py::test_delete_note PASSED
+src/tests/test_api.py::test_unknown_note PASSED
+src/tests/test_api.py::test_create_another_note PASSED
+src/tests/test_api.py::test_get_one_note PASSED
+
+====================================================================================== 11 passed in 0.18s ======================================================================================
 
 ```
 
@@ -367,7 +409,7 @@ The project uses [locust](https://locust.io) with a single load test file that y
 ![locust]
 
 ```shell
-make load_tests
+$ make load_tests
 [2020-12-29 21:55:19,670] yourmachine.local/INFO/locust.main: Starting web interface at http://0.0.0.0:8089 (accepting connections from all network interfaces)
 [2020-12-29 21:55:19,678] yourmachine.local/INFO/locust.main: Starting Locust 1.4.1
 [2020-12-29 21:56:09,048] yourmachine.local/INFO/locust.runners: Spawning 10 users at the rate 2 users/s (0 users already running)...
@@ -471,6 +513,34 @@ make: *** [load_tests] Error 1
         index.md  # The documentation homepage.
         ...       # Other markdown pages, images and other files.
 
+### Run documentation server
+
+You can use `make serve` to start the documentation server :
+
+```shell
+$ make serve
+INFO    -  Building documentation... 
+INFO    -  Cleaning site directory 
+INFO    -  Documentation built in 0.10 seconds 
+[I 201230 22:19:08 server:335] Serving on http://127.0.0.1:8000
+INFO    -  Serving on http://127.0.0.1:8000
+[I 201230 22:19:08 handlers:62] Start watching changes
+INFO    -  Start watching changes
+[I 201230 22:19:08 handlers:64] Start detecting changes
+INFO    -  Start detecting changes
+[I 201230 22:19:11 handlers:135] Browser Connected: http://127.0.0.1:8000/#objectives
+INFO    -  Browser Connected: http://127.0.0.1:8000/#objectives
+```
+
+You should see the documentation at [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+![documentation]
+
+----
+
+
+[documentation]: img/documentation.png
+
 [adminer]: img/adminer.png
 
 [locust]: img/locust_logo.png
@@ -481,4 +551,8 @@ make: *** [load_tests] Error 1
 
 [locust charts]: img/locust_charts.png
 
-[locust charts 2]: img/locust_charts_2.png
+[locust charts 2]: img/locust_charts_2.png}
+
+[openapi]: img/openapi.png
+
+[redoc]: img/redoc.png
