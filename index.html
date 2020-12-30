@@ -1,0 +1,1473 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <meta name="author" content="vincedgy">
+      
+      
+        <link rel="canonical" href="https://vincedgy.github.io/fastapi-async-with-postgresql/">
+      
+      <link rel="shortcut icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.3">
+    
+    
+      
+        <title>FastAPI, asyncio with Postgresql</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.3b61ea93.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.39b8e14a.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="css/extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="preference" data-md-color-primary="" data-md-color-accent="orange">
+      
+        <script>matchMedia("(prefers-color-scheme: dark)").matches&&document.body.setAttribute("data-md-color-scheme","slate")</script>
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#fastapi-asyncio-with-postgresql" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://vincedgy.github.io/fastapi-async-with-postgresql/" title="FastAPI, asyncio with Postgresql" class="md-header-nav__button md-logo" aria-label="FastAPI, asyncio with Postgresql">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            FastAPI, asyncio with Postgresql
+          </span>
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/vincedgy/fastapi-async-with-postgresql/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://vincedgy.github.io/fastapi-async-with-postgresql/" title="FastAPI, asyncio with Postgresql" class="md-nav__button md-logo" aria-label="FastAPI, asyncio with Postgresql">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    FastAPI, asyncio with Postgresql
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/vincedgy/fastapi-async-with-postgresql/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Home
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="." class="md-nav__link md-nav__link--active">
+      Home
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objectives" class="md-nav__link">
+    Objectives
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#things-i-consider" class="md-nav__link">
+    Things I consider...
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+    <nav class="md-nav" aria-label="Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#package-manager" class="md-nav__link">
+    Package manager
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#projects-main-libraries" class="md-nav__link">
+    Project's main libraries
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-needs" class="md-nav__link">
+    Other needs...
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#but-also" class="md-nav__link">
+    But also...
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automation-with-makefile" class="md-nav__link">
+    Automation with Makefile
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-dependencies" class="md-nav__link">
+    Install dependencies
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-postgresql-with-docker" class="md-nav__link">
+    Run Postgresql with Docker
+  </a>
+  
+    <nav class="md-nav" aria-label="Run Postgresql with Docker">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#launch-docker-compose" class="md-nav__link">
+    Launch docker-compose
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-postgresql" class="md-nav__link">
+    Check postgresql
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-a-psql-client" class="md-nav__link">
+    Run a psql client
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#or-use-adminer" class="md-nav__link">
+    Or... use adminer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-the-server" class="md-nav__link">
+    Run the server
+  </a>
+  
+    <nav class="md-nav" aria-label="Run the server">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-poetry-runner" class="md-nav__link">
+    Using poetry runner
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop-the-server" class="md-nav__link">
+    Stop the server
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-documentation" class="md-nav__link">
+    API Documentation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-the-server" class="md-nav__link">
+    Test the server
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-integration-tests" class="md-nav__link">
+    Run integration tests
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-load-tests" class="md-nav__link">
+    Run load tests
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mkdocs" class="md-nav__link">
+    mkdocs
+  </a>
+  
+    <nav class="md-nav" aria-label="mkdocs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basics--mkdocs-commands" class="md-nav__link">
+    Basics : mkdocs Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation--layout" class="md-nav__link">
+    Documentation : layout
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-documentation-server" class="md-nav__link">
+    Run documentation server
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+
+  <li class="md-nav__item">
+    <a href="about/" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objectives" class="md-nav__link">
+    Objectives
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#things-i-consider" class="md-nav__link">
+    Things I consider...
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+    <nav class="md-nav" aria-label="Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#package-manager" class="md-nav__link">
+    Package manager
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#projects-main-libraries" class="md-nav__link">
+    Project's main libraries
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-needs" class="md-nav__link">
+    Other needs...
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#but-also" class="md-nav__link">
+    But also...
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automation-with-makefile" class="md-nav__link">
+    Automation with Makefile
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-dependencies" class="md-nav__link">
+    Install dependencies
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-postgresql-with-docker" class="md-nav__link">
+    Run Postgresql with Docker
+  </a>
+  
+    <nav class="md-nav" aria-label="Run Postgresql with Docker">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#launch-docker-compose" class="md-nav__link">
+    Launch docker-compose
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-postgresql" class="md-nav__link">
+    Check postgresql
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-a-psql-client" class="md-nav__link">
+    Run a psql client
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#or-use-adminer" class="md-nav__link">
+    Or... use adminer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-the-server" class="md-nav__link">
+    Run the server
+  </a>
+  
+    <nav class="md-nav" aria-label="Run the server">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-poetry-runner" class="md-nav__link">
+    Using poetry runner
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop-the-server" class="md-nav__link">
+    Stop the server
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-documentation" class="md-nav__link">
+    API Documentation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-the-server" class="md-nav__link">
+    Test the server
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-integration-tests" class="md-nav__link">
+    Run integration tests
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-load-tests" class="md-nav__link">
+    Run load tests
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mkdocs" class="md-nav__link">
+    mkdocs
+  </a>
+  
+    <nav class="md-nav" aria-label="mkdocs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basics--mkdocs-commands" class="md-nav__link">
+    Basics : mkdocs Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation--layout" class="md-nav__link">
+    Documentation : layout
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-documentation-server" class="md-nav__link">
+    Run documentation server
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/vincedgy/fastapi-async-with-postgresql/tree/main/docs/index.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="fastapi-asyncio-with-postgresql">FastAPI, asyncio with Postgresql<a class="headerlink" href="#fastapi-asyncio-with-postgresql" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Author : <a class="gh-link gh-mention" href="https://github.com/vincedgy" title="GitHub User: @vincedgy">@vincedgy</a></p>
+</blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This documentation uses the excellent <code>mkdocs</code> technical documentation static website generator that you can find
+at <a href="https://www.mkdocs.org">mkdocs.org</a>. See more <a href="#mkdocs">here</a></p>
+</div>
+<p>You'll find the repository
+at <a href="https://github.com/vincedgy/fastapi-async-with-postgresql">https://github.com/vincedgy/fastapi-async-with-postgresql</a></p>
+<p>Let's do this <img alt="🚀" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f680.svg" title=":rocket:" /></p>
+<hr />
+<h2 id="objectives">Objectives<a class="headerlink" href="#objectives" title="Permanent link">&para;</a></h2>
+<p>The main goal of this little demonstration project is to explore <a href="https://fastapi.tiangolo.com/">FastAPI</a> <span class="twemoji heart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 20.408c-.492.308-.903.546-1.192.709-.153.086-.308.17-.463.252h-.002a.75.75 0 01-.686 0 16.709 16.709 0 01-.465-.252 31.147 31.147 0 01-4.803-3.34C3.8 15.572 1 12.331 1 8.513 1 5.052 3.829 2.5 6.736 2.5 9.03 2.5 10.881 3.726 12 5.605 13.12 3.726 14.97 2.5 17.264 2.5 20.17 2.5 23 5.052 23 8.514c0 3.818-2.801 7.06-5.389 9.262A31.146 31.146 0 0114 20.408z"/></svg></span> framework
+using <a href="https://docs.python.org/3/library/asyncio.html">asyncio</a> WITH a higher level abstraction
+named <a href="https://pypi.org/project/databases/">databases</a> connected to a SQL (not async io by nature) PostgreSQL database.</p>
+<p>This project is very much inspired by the tutorial of the <strong><em>databases</em></strong> framework itself that you can find
+at <a href="https://www.encode.io/databases/#quickstart">'databases' QuickStart</a>
+which gives asyncio support for a range of SQL databases.</p>
+<p>Enjoy 🍺 !</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are installing Python on Windows, be sure to check the box to have
+Python added to your PATH if the installer offers such an option (it's
+normally off by default).</p>
+</div>
+<h2 id="things-i-consider">Things I consider...<a class="headerlink" href="#things-i-consider" title="Permanent link">&para;</a></h2>
+<p>I should do in the future :</p>
+<ul class="task-list">
+<li class="task-list-item"><input type="checkbox" disabled/> : Make a proper Docker file and puch it to the Cloud</li>
+<li class="task-list-item"><input type="checkbox" disabled/> : Have a look at <a href="https://github.com/magicstack/asyncpg">asyncpg</a></li>
+<li class="task-list-item"><input type="checkbox" disabled/> : Make this project work on <a href="https://www.cockroachlabs.com/db/cockroachdb">cockroach</a> database instead of
+  Postgresql</li>
+<li class="task-list-item"><input type="checkbox" disabled/> : Add a light <a href="https://flask.palletsprojects.com/en/1.1.x/">Flask</a> FrontEnd with <a href="https://svelte.dev">svelte</a>
+  FrontEnd, for REST API interactions</li>
+<li class="task-list-item"><input type="checkbox" disabled/> : Checkout the excellent <a href="https://github.com/vinta/awesome-python">https://github.com/vinta/awesome-python</a> for
+  more inspiration.</li>
+</ul>
+<p><img alt="😄" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f604.svg" title=":smile:" /></p>
+<hr />
+<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
+<p>The code hase been developed and tested with Python 3.9.1. It is probably ok with Python 3.6+.</p>
+<ul>
+<li><a href="https://python.org">Python 3.9+</a></li>
+</ul>
+<h3 id="package-manager">Package manager<a class="headerlink" href="#package-manager" title="Permanent link">&para;</a></h3>
+<p>This project use the marvelous <a href="https://python-poetry.org/">Poetry</a> package manager and builder.</p>
+<p>It handles dependencies management, locking version and publishing to pypi automagically.</p>
+<p>It eases your day to day Python development projects with a lot a easy command to install a virtual environment and
+manage dependencies in a very secured way.</p>
+<h3 id="projects-main-libraries">Project's main libraries<a class="headerlink" href="#projects-main-libraries" title="Permanent link">&para;</a></h3>
+<p>This project put together a lot a of great Python libs :</p>
+<ul>
+<li><a href="https://fastapi.tiangolo.com/">FastAPI</a> : the blasting fast REST API framework</li>
+<li><a href="https://www.uvicorn.org/">uvicorn</a> : the bullet speed ASGI server of reference</li>
+<li><a href="https://pydantic-docs.helpmanual.io/">pydantic</a> : the great shema manager</li>
+<li><a href="https://pypi.org/project/databases/">Databases</a> : the defacto asyncio lib for many SQL Databases</li>
+<li><a href="https://pypi.org/project/colorama/">colorama</a> : the best color'ish lib ever</li>
+</ul>
+<h3 id="other-needs">Other needs...<a class="headerlink" href="#other-needs" title="Permanent link">&para;</a></h3>
+<p>Obviously you'll need a postgresql database, but we will have some help with docker if you don't have postgresql 9+
+installed locally on your machine.</p>
+<h3 id="but-also">But also...<a class="headerlink" href="#but-also" title="Permanent link">&para;</a></h3>
+<p>We'll be using the incredible easy to use  <a href="https://locust.io">locust</a> for performance/load testing.</p>
+<hr />
+<h2 id="automation-with-makefile">Automation with Makefile<a class="headerlink" href="#automation-with-makefile" title="Permanent link">&para;</a></h2>
+<p>A <code>Makefile</code> automates all the commands you need for you.</p>
+<p>You'll find description of every command by typing <code>make help</code>.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>$ make <span class="nb">help</span>
+Wed Dec <span class="m">30</span> <span class="m">23</span>:35:52 CET <span class="m">2020</span>
+<span class="c1">#                                   </span>
+<span class="c1">#   __  __     ______     __         ______    </span>
+<span class="c1">#  /\ \_\ \   /\  ___\   /\ \       /\  == \   </span>
+<span class="c1">#  \ \  __ \  \ \  __\   \ \ \____  \ \  _-/   </span>
+<span class="c1">#   \ \_\ \_\  \ \_____\  \ \_____\  \ \_\     </span>
+<span class="c1">#    \/_/\/_/   \/_____/   \/_____/   \/_/     </span>
+<span class="c1">#                                                 </span>
+<span class="c1"># ---------------HELP------------------------------------</span>
+<span class="c1"># - Setup the project              : make install</span>
+<span class="c1"># - Run the server (blocking)      : make start</span>
+<span class="c1"># - Evaluate status of the server  : make status</span>
+<span class="c1"># - Stop (kill) the server         : make kill</span>
+<span class="c1"># - Tail the current log file      : make tail</span>
+<span class="c1"># - Run tests on a running server  : make tests</span>
+<span class="c1"># - Run tests on a running server  : make load_tests</span>
+<span class="c1"># - Launch mkdocs server Run       : make serve</span>
+<span class="c1"># - Publish docs GitHub pages      : make publish</span>
+<span class="c1"># --------------------------------------------------------</span>
+Enjoy 🍺 !
+</code></pre></div>
+</td></tr></table>
+<hr />
+<h2 id="install-dependencies">Install dependencies<a class="headerlink" href="#install-dependencies" title="Permanent link">&para;</a></h2>
+<p>Using poetry it's like :</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>python3 -m poetry install
+</code></pre></div>
+</td></tr></table>
+<p>You can also use <code>Makefile</code> commands, like :</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>make install
+</code></pre></div>
+</td></tr></table>
+<p>Then, you should activate the shell</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>python3 -m poetry shell
+</code></pre></div>
+</td></tr></table>
+<p>From this point you can use the IDE of your choice.</p>
+<hr />
+<h2 id="run-postgresql-with-docker">Run Postgresql with Docker<a class="headerlink" href="#run-postgresql-with-docker" title="Permanent link">&para;</a></h2>
+<p>If you don't have any local <a href="https://www.postgresql.org">postgresql</a> instance on your local machine, you can use the
+provided <code>docker-compose</code> stack.</p>
+<p>Of course, you'll need to choose the appropriate <code>docker</code> installation (you should install the proper <code>docker desktop</code>
+for your local OS) and install the <code>docker-compose</code> utility tool as well</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please refer to the official documentations of <code>docker</code> and <code>docker-compose</code> for your environment.</p>
+</div>
+<h3 id="launch-docker-compose">Launch docker-compose<a class="headerlink" href="#launch-docker-compose" title="Permanent link">&para;</a></h3>
+<p>Launch the docker-compose stack like so :</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>$ docker-compose up -d
+Starting fastapi-async-with-postgresql_adminer_1 ... <span class="k">done</span>
+Recreating fastapi-async-with-postgresql_db_1    ... <span class="k">done</span>
+</code></pre></div>
+</td></tr></table>
+<h3 id="check-postgresql">Check postgresql<a class="headerlink" href="#check-postgresql" title="Permanent link">&para;</a></h3>
+<p>You can check if the stack is up and running :</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>$ docker-compose ps
+                 Name                                Command               State           Ports
+---------------------------------------------------------------------------------------------------------
+fastapi-async-with-postgresql_adminer_1   entrypoint.sh docker-php-e ...   Up      <span class="m">0</span>.0.0.0:8080-&gt;8080/tcp
+fastapi-async-with-postgresql_db_1        docker-entrypoint.sh postgres    Up      <span class="m">0</span>.0.0.0:5432-&gt;5432/tcp
+</code></pre></div>
+</td></tr></table>
+<h3 id="run-a-psql-client">Run a psql client<a class="headerlink" href="#run-a-psql-client" title="Permanent link">&para;</a></h3>
+<p>From this point you should be able to log on your database with the help of psql also with docker :</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>$ docker run -it --rm --network fastapi-async-with-postgresql_default postgres psql -h db -U vincent -d dev
+Password <span class="k">for</span> user vincent:
+psql <span class="o">(</span><span class="m">13</span>.1 <span class="o">(</span>Debian <span class="m">13</span>.1-1.pgdg100+1<span class="o">))</span>
+Type <span class="s2">&quot;help&quot;</span> <span class="k">for</span> help.
+
+<span class="nv">dev</span><span class="o">=</span><span class="c1"># \l</span>
+                               List of databases
+   Name    <span class="p">|</span>  Owner  <span class="p">|</span> Encoding <span class="p">|</span>  Collate   <span class="p">|</span>   Ctype    <span class="p">|</span>  Access privileges
+-----------+---------+----------+------------+------------+---------------------
+ dev       <span class="p">|</span> vincent <span class="p">|</span> UTF8     <span class="p">|</span> en_US.utf8 <span class="p">|</span> en_US.utf8 <span class="p">|</span>
+ postgres  <span class="p">|</span> vincent <span class="p">|</span> UTF8     <span class="p">|</span> en_US.utf8 <span class="p">|</span> en_US.utf8 <span class="p">|</span>
+ template0 <span class="p">|</span> vincent <span class="p">|</span> UTF8     <span class="p">|</span> en_US.utf8 <span class="p">|</span> en_US.utf8 <span class="p">|</span> <span class="o">=</span>c/vincent         +
+           <span class="p">|</span>         <span class="p">|</span>          <span class="p">|</span>            <span class="p">|</span>            <span class="p">|</span> <span class="nv">vincent</span><span class="o">=</span>CTc/vincent
+ template1 <span class="p">|</span> vincent <span class="p">|</span> UTF8     <span class="p">|</span> en_US.utf8 <span class="p">|</span> en_US.utf8 <span class="p">|</span> <span class="o">=</span>c/vincent         +
+           <span class="p">|</span>         <span class="p">|</span>          <span class="p">|</span>            <span class="p">|</span>            <span class="p">|</span> <span class="nv">vincent</span><span class="o">=</span>CTc/vincent
+ vincent   <span class="p">|</span> vincent <span class="p">|</span> UTF8     <span class="p">|</span> en_US.utf8 <span class="p">|</span> en_US.utf8 <span class="p">|</span>
+<span class="o">(</span><span class="m">5</span> rows<span class="o">)</span>
+</code></pre></div>
+</td></tr></table>
+<h3 id="or-use-adminer">Or... use adminer<a class="headerlink" href="#or-use-adminer" title="Permanent link">&para;</a></h3>
+<p><code>docker-compose.yml</code> file runs <a href="https://www.adminer.org">adminer</a>, a great php tool for db navigation.</p>
+<p>You should open the
+url <a href="http://localhost:8080/?pgsql=db&amp;username=vincent&amp;db=vincent&amp;ns=public&amp;select=notes">http://localhost:8080/?pgsql=db&amp;username=vincent&amp;db=vincent&amp;ns=public&amp;select=notes</a></p>
+<p>Adminer will display the content of the "notes" table that the project uses.</p>
+<p><img alt="adminer" src="img/adminer.png" /></p>
+<hr />
+<h2 id="run-the-server">Run the server<a class="headerlink" href="#run-the-server" title="Permanent link">&para;</a></h2>
+<p>You can start the server with <code>make run</code></p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>$ make run
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,350:INFO:db_utils:Defining configuration <span class="k">for</span> db at <span class="o">[</span>postgresql://vincent:****@localhost:5432/vincent?sslmode<span class="o">=</span>prefer<span class="o">]</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,423:INFO:schema:Defining table <span class="s1">&#39;notes&#39;</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,424:INFO:schema:Creating schema
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,614 INFO sqlalchemy.engine.base.Engine <span class="k">select</span> version<span class="o">()</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,614:INFO:sqlalchemy.engine.base.Engine:select version<span class="o">()</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,614 INFO sqlalchemy.engine.base.Engine <span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,614:INFO:sqlalchemy.engine.base.Engine:<span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,616 INFO sqlalchemy.engine.base.Engine <span class="k">select</span> current_schema<span class="o">()</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,616:INFO:sqlalchemy.engine.base.Engine:select current_schema<span class="o">()</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,617 INFO sqlalchemy.engine.base.Engine <span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,617:INFO:sqlalchemy.engine.base.Engine:<span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,619 INFO sqlalchemy.engine.base.Engine SELECT CAST<span class="o">(</span><span class="s1">&#39;test plain returns&#39;</span> AS VARCHAR<span class="o">(</span><span class="m">60</span><span class="o">))</span> AS anon_1
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,619:INFO:sqlalchemy.engine.base.Engine:SELECT CAST<span class="o">(</span><span class="s1">&#39;test plain returns&#39;</span> AS VARCHAR<span class="o">(</span><span class="m">60</span><span class="o">))</span> AS anon_1
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,619 INFO sqlalchemy.engine.base.Engine <span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,619:INFO:sqlalchemy.engine.base.Engine:<span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,620 INFO sqlalchemy.engine.base.Engine SELECT CAST<span class="o">(</span><span class="s1">&#39;test unicode returns&#39;</span> AS VARCHAR<span class="o">(</span><span class="m">60</span><span class="o">))</span> AS anon_1
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,620:INFO:sqlalchemy.engine.base.Engine:SELECT CAST<span class="o">(</span><span class="s1">&#39;test unicode returns&#39;</span> AS VARCHAR<span class="o">(</span><span class="m">60</span><span class="o">))</span> AS anon_1
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,620 INFO sqlalchemy.engine.base.Engine <span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,620:INFO:sqlalchemy.engine.base.Engine:<span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,620 INFO sqlalchemy.engine.base.Engine show standard_conforming_strings
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,620:INFO:sqlalchemy.engine.base.Engine:show standard_conforming_strings
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,621 INFO sqlalchemy.engine.base.Engine <span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,621:INFO:sqlalchemy.engine.base.Engine:<span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,622 INFO sqlalchemy.engine.base.Engine <span class="k">select</span> relname from pg_class c join pg_namespace n on n.oid<span class="o">=</span>c.relnamespace where pg_catalog.pg_table_is_visible<span class="o">(</span>c.oid<span class="o">)</span> and <span class="nv">relname</span><span class="o">=</span>%<span class="o">(</span>name<span class="o">)</span>s
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,622:INFO:sqlalchemy.engine.base.Engine:select relname from pg_class c join pg_namespace n on n.oid<span class="o">=</span>c.relnamespace where pg_catalog.pg_table_is_visible<span class="o">(</span>c.oid<span class="o">)</span> and <span class="nv">relname</span><span class="o">=</span>%<span class="o">(</span>name<span class="o">)</span>s
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,622 INFO sqlalchemy.engine.base.Engine <span class="o">{</span><span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;notes&#39;</span><span class="o">}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,622:INFO:sqlalchemy.engine.base.Engine:<span class="o">{</span><span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;notes&#39;</span><span class="o">}</span>
+INFO:     Uvicorn running on http://0.0.0.0:5000 <span class="o">(</span>Press CTRL+C to quit<span class="o">)</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,639:INFO:uvicorn.error:Uvicorn running on http://0.0.0.0:5000 <span class="o">(</span>Press CTRL+C to quit<span class="o">)</span>
+INFO:     Started reloader process <span class="o">[</span><span class="m">8791</span><span class="o">]</span> using statreload
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:42,639:INFO:uvicorn.error:Started reloader process <span class="o">[</span><span class="m">8791</span><span class="o">]</span> using statreload
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,137:INFO:db_utils:Defining configuration <span class="k">for</span> db at <span class="o">[</span>postgresql://vincent:****@localhost:5432/vincent?sslmode<span class="o">=</span>prefer<span class="o">]</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,228:INFO:schema:Defining table <span class="s1">&#39;notes&#39;</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,233:INFO:schema:Creating schema
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,300 INFO sqlalchemy.engine.base.Engine <span class="k">select</span> version<span class="o">()</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,300:INFO:sqlalchemy.engine.base.Engine:select version<span class="o">()</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,300 INFO sqlalchemy.engine.base.Engine <span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,300:INFO:sqlalchemy.engine.base.Engine:<span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,305 INFO sqlalchemy.engine.base.Engine <span class="k">select</span> current_schema<span class="o">()</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,305:INFO:sqlalchemy.engine.base.Engine:select current_schema<span class="o">()</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,306 INFO sqlalchemy.engine.base.Engine <span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,306:INFO:sqlalchemy.engine.base.Engine:<span class="o">{}</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,309 INFO sqlalchemy.engine.base.Engine SELECT CAST<span class="o">(</span><span class="s1">&#39;test plain returns&#39;</span> AS VARCHAR<span class="o">(</span><span class="m">60</span><span class="o">))</span> AS anon_1
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,309:INFO:sqlalchemy.engine.base.Engine:SELECT CAST<span class="o">(</span><span class="s1">&#39;test plain returns&#39;</span> AS VARCHAR<span class="o">(</span><span class="m">60</span><span class="o">))</span> AS anon_1
+<span class="m">2020</span>-12-30 <span class="m">10</span>:17:43,309 INFO sqlalchemy.engine.base.Engine <span class="o">{}</span>
+</code></pre></div>
+</td></tr></table>
+<h3 id="using-poetry-runner">Using poetry runner<a class="headerlink" href="#using-poetry-runner" title="Permanent link">&para;</a></h3>
+<p>You can prefer to launch the server through poetry runner :</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>poetry run python src/main.py
+
+Python <span class="m">2</span>.7 will no longer be supported in the next feature release of Poetry <span class="o">(</span><span class="m">1</span>.2<span class="o">)</span>.
+You should consider updating your Python version to a supported one.
+
+Note that you will still be able to manage Python <span class="m">2</span>.7 projects by using the env command.
+See https://python-poetry.org/docs/managing-environments/ <span class="k">for</span> more information.
+
+The currently activated Python version <span class="m">2</span>.7.16 is not supported by the project <span class="o">(</span>^3.9<span class="o">)</span>.
+Trying to find and use a compatible version.
+Using python3 <span class="o">(</span><span class="m">3</span>.9.1<span class="o">)</span>
+<span class="m">2020</span>-12-29 <span class="m">21</span>:23:39,115:INFO:db_utils:Defining configuration <span class="k">for</span> db at <span class="o">[</span>postgresql://vincent:****@localhost:5432/vincent?sslmode<span class="o">=</span>prefer<span class="o">]</span>
+<span class="m">2020</span>-12-29 <span class="m">21</span>:23:39,145:INFO:schema:Defining table <span class="s1">&#39;notes&#39;</span>
+<span class="m">2020</span>-12-29 <span class="m">21</span>:23:39,146:INFO:schema:Creating schema
+INFO:     Uvicorn running on http://0.0.0.0:5000 <span class="o">(</span>Press CTRL+C to quit<span class="o">)</span>
+<span class="m">2020</span>-12-29 <span class="m">21</span>:23:39,200:INFO:uvicorn.error:Uvicorn running on http://0.0.0.0:5000 <span class="o">(</span>Press CTRL+C to quit<span class="o">)</span>
+INFO:     Started reloader process <span class="o">[</span><span class="m">47773</span><span class="o">]</span> using statreload
+<span class="m">2020</span>-12-29 <span class="m">21</span>:23:39,200:INFO:uvicorn.error:Started reloader process <span class="o">[</span><span class="m">47773</span><span class="o">]</span> using statreload
+<span class="m">2020</span>-12-29 <span class="m">21</span>:23:39,458:INFO:db_utils:Defining configuration <span class="k">for</span> db at <span class="o">[</span>postgresql://vincent:****@localhost:5432/vincent?sslmode<span class="o">=</span>prefer<span class="o">]</span>
+<span class="m">2020</span>-12-29 <span class="m">21</span>:23:39,484:INFO:schema:Defining table <span class="s1">&#39;notes&#39;</span>
+<span class="m">2020</span>-12-29 <span class="m">21</span>:23:39,485:INFO:schema:Creating schema
+INFO:     Started server process <span class="o">[</span><span class="m">47780</span><span class="o">]</span>
+<span class="m">2020</span>-12-29 <span class="m">21</span>:23:39,541:INFO:uvicorn.error:Started server process <span class="o">[</span><span class="m">47780</span><span class="o">]</span>
+INFO:     Waiting <span class="k">for</span> application startup.
+<span class="m">2020</span>-12-29 <span class="m">21</span>:23:39,542:INFO:uvicorn.error:Waiting <span class="k">for</span> application startup.
+<span class="m">2020</span>-12-29 <span class="m">21</span>:23:39,559:INFO:databases:Connected to database postgresql://vincent:********@localhost:5432/vincent?sslmode<span class="o">=</span>prefer
+INFO:     Application startup complete.
+<span class="m">2020</span>-12-29 <span class="m">21</span>:23:39,560:INFO:uvicorn.error:Application startup complete.
+</code></pre></div>
+</td></tr></table>
+<h3 id="stop-the-server">Stop the server<a class="headerlink" href="#stop-the-server" title="Permanent link">&para;</a></h3>
+<p>You can stop the server by hitting 'Ctrl' + 'C'</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>^CINFO:     Shutting down
+<span class="m">2020</span>-12-30 <span class="m">10</span>:26:11,615:INFO:uvicorn.error:Shutting down
+INFO:     Waiting <span class="k">for</span> application shutdown.
+<span class="m">2020</span>-12-30 <span class="m">10</span>:26:11,718:INFO:uvicorn.error:Waiting <span class="k">for</span> application shutdown.
+<span class="m">2020</span>-12-30 <span class="m">10</span>:26:11,728:INFO:databases:Disconnected from database postgresql://vincent:********@localhost:5432/vincent?sslmode<span class="o">=</span>prefer
+INFO:     Application shutdown complete.
+<span class="m">2020</span>-12-30 <span class="m">10</span>:26:11,730:INFO:uvicorn.error:Application shutdown complete.
+INFO:     Finished server process <span class="o">[</span><span class="m">8797</span><span class="o">]</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:26:11,730:INFO:uvicorn.error:Finished server process <span class="o">[</span><span class="m">8797</span><span class="o">]</span>
+INFO:     Stopping reloader process <span class="o">[</span><span class="m">8791</span><span class="o">]</span>
+<span class="m">2020</span>-12-30 <span class="m">10</span>:26:11,895:INFO:uvicorn.error:Stopping reloader process <span class="o">[</span><span class="m">8791</span><span class="o">]</span>
+</code></pre></div>
+</td></tr></table>
+<hr />
+<h2 id="api-documentation">API Documentation<a class="headerlink" href="#api-documentation" title="Permanent link">&para;</a></h2>
+<p>API's documentation is autogenerated with the help of FastAPI framework.</p>
+<p>FastAPI build automagicaly an <a href="https://swagger.io/specification/">OpenAPI v3</a> documentation JSON file that is served
+with a local Web site at <a href="http://localhost:5000/docs">http://localhost:5000/docs</a>.</p>
+<p><img alt="openapi" src="img/openapi.png" /></p>
+<p>It also provides the excellent <a href="https://github.com/Redocly/redoc">redoc</a> that present ths OpenAPI v3 in a very neat way
+at <a href="http://localhost:5000/redoc">http://localhost:5000/redoc</a>.</p>
+<p><img alt="redoc" src="img/redoc.png" /></p>
+<p>This documentation is incredibly useful when you have to verify your API endpoints during development.</p>
+<hr />
+<h2 id="test-the-server">Test the server<a class="headerlink" href="#test-the-server" title="Permanent link">&para;</a></h2>
+<p>You can use curl or whatever client for REST API</p>
+<p>Create a Note :</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>$ curl -i -X POST http://localhost:5000/notes --data <span class="s2">&quot;{\&quot;text\&quot;:\&quot;Test\&quot;,\&quot;completed\&quot;:\&quot;false\&quot;}&quot;</span>
+HTTP/1.1 <span class="m">200</span> OK
+date: Tue, <span class="m">29</span> Dec <span class="m">2020</span> <span class="m">20</span>:25:46 GMT
+server: uvicorn
+content-length: <span class="m">40</span>
+content-type: application/json
+
+<span class="o">{</span><span class="s2">&quot;text&quot;</span>:<span class="s2">&quot;Test&quot;</span>,<span class="s2">&quot;completed&quot;</span>:false,<span class="s2">&quot;id&quot;</span>:1<span class="o">}</span>%
+</code></pre></div>
+</td></tr></table>
+<p>Request all notes :</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>curl -i -X GET http://localhost:5000/notes
+HTTP/1.1 <span class="m">200</span> OK
+date: Tue, <span class="m">29</span> Dec <span class="m">2020</span> <span class="m">20</span>:26:36 GMT
+server: uvicorn
+content-length: <span class="m">42</span>
+content-type: application/json
+
+<span class="o">[{</span><span class="s2">&quot;id&quot;</span>:1,<span class="s2">&quot;text&quot;</span>:<span class="s2">&quot;Test&quot;</span>,<span class="s2">&quot;completed&quot;</span>:false<span class="o">}]</span>%
+</code></pre></div>
+</td></tr></table>
+<hr />
+<h2 id="run-integration-tests">Run integration tests<a class="headerlink" href="#run-integration-tests" title="Permanent link">&para;</a></h2>
+<p>Once you have your database up and running you should be able to launche all the test with one command with the help of
+the Makefile command <code>make tests</code>.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>$ make <span class="nv">tests</span>
+<span class="o">=====================================================================================</span> <span class="nb">test</span> session <span class="nv">starts</span> <span class="o">======================================================================================</span>
+platform darwin -- Python <span class="m">3</span>.9.1, pytest-5.4.3, py-1.10.0, pluggy-0.13.1 -- /Users/vdagoury/Library/Caches/pypoetry/virtualenvs/api-sK0lnS2G-py3.9/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/vdagoury/Projects/Python/asynchronous/fastapi-async-with-postgresql
+collected <span class="m">11</span> items                                                                                                                                                                             
+
+src/tests/test_api.py::test_version PASSED
+src/tests/test_api.py::test_create_note PASSED
+src/tests/test_api.py::test_known_note PASSED
+src/tests/test_api.py::test_get_all_notes PASSED
+src/tests/test_api.py::test_update_note PASSED
+src/tests/test_api.py::test_get_notes PASSED
+src/tests/test_api.py::test_get_notes_with_pagination <span class="o">[{</span><span class="s1">&#39;id&#39;</span>: <span class="m">1</span>, <span class="s1">&#39;text&#39;</span>: <span class="s1">&#39;test&#39;</span>, <span class="s1">&#39;completed&#39;</span>: False<span class="o">}]</span>
+PASSED
+src/tests/test_api.py::test_delete_note PASSED
+src/tests/test_api.py::test_unknown_note PASSED
+src/tests/test_api.py::test_create_another_note PASSED
+src/tests/test_api.py::test_get_one_note <span class="nv">PASSED</span>
+
+<span class="o">======================================================================================</span> <span class="m">11</span> passed in <span class="m">0</span>.18s <span class="o">======================================================================================</span>
+</code></pre></div>
+</td></tr></table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You may need to drop the table with <code>drop table notes;</code> 
+in order to find proper starting conditions for integration tests.</p>
+<p>I probably need to go further for initial state creation for this integrations tests. </p>
+</div>
+<hr />
+<h2 id="run-load-tests">Run load tests<a class="headerlink" href="#run-load-tests" title="Permanent link">&para;</a></h2>
+<p>The project uses <a href="https://locust.io">locust</a> with a single load test file that you can easily update.</p>
+<p><img alt="locust" src="img/locust_logo.png" /></p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>$ make load_tests
+<span class="o">[</span><span class="m">2020</span>-12-29 <span class="m">21</span>:55:19,670<span class="o">]</span> yourmachine.local/INFO/locust.main: Starting web interface at http://0.0.0.0:8089 <span class="o">(</span>accepting connections from all network interfaces<span class="o">)</span>
+<span class="o">[</span><span class="m">2020</span>-12-29 <span class="m">21</span>:55:19,678<span class="o">]</span> yourmachine.local/INFO/locust.main: Starting Locust <span class="m">1</span>.4.1
+<span class="o">[</span><span class="m">2020</span>-12-29 <span class="m">21</span>:56:09,048<span class="o">]</span> yourmachine.local/INFO/locust.runners: Spawning <span class="m">10</span> users at the rate <span class="m">2</span> users/s <span class="o">(</span><span class="m">0</span> users already running<span class="o">)</span>...
+<span class="o">[</span><span class="m">2020</span>-12-29 <span class="m">21</span>:56:13,564<span class="o">]</span> yourmachine.local/INFO/locust.runners: All users spawned: QuickstartUser: <span class="m">10</span> <span class="o">(</span><span class="m">10</span> total running<span class="o">)</span>
+</code></pre></div>
+</td></tr></table>
+<p>You're invited to open the given http://0.0.0.0:8089</p>
+<p>Then you should be able to input a setting.</p>
+<p><img alt="locust dialog" src="img/locust_dialog.png" /></p>
+<p>The test begins when you hit the button :</p>
+<p><img alt="locust test tab" src="img/locust_launch_tab.png" /></p>
+<p>You find charts that show the global performance all along tht test</p>
+<p><img alt="locust charts" src="img/locust_charts.png" /></p>
+<p>After a few minutes you should get something like this</p>
+<p><img alt="locust charts 2" src="img/locust_charts_2.png" /></p>
+<p>You can stop the load testing by pressing Ctrl+C which will give you an output on the temrinal like this one :</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="o">[</span>...<span class="o">]</span>
+<span class="m">2020</span>-12-30T20:43:03Z &lt;Greenlet at 0x1117bf6a0: run_user<span class="o">(</span>&lt;locustfile.QuickstartUser object at 0x111817ca0&gt;<span class="o">)</span>&gt; failed with KeyboardInterrupt
+
+<span class="o">[</span><span class="m">2020</span>-12-30 <span class="m">21</span>:43:03,026<span class="o">]</span> yourmachine.local/INFO/locust.main: Running teardowns...
+<span class="o">[</span><span class="m">2020</span>-12-30 <span class="m">21</span>:43:03,026<span class="o">]</span> yourmachine.local/INFO/locust.main: Shutting down <span class="o">(</span><span class="nb">exit</span> code <span class="m">1</span><span class="o">)</span>, bye.
+<span class="o">[</span><span class="m">2020</span>-12-30 <span class="m">21</span>:43:03,026<span class="o">]</span> yourmachine.local/INFO/locust.main: Cleaning up runner...
+<span class="o">[</span><span class="m">2020</span>-12-30 <span class="m">21</span>:43:03,026<span class="o">]</span> yourmachine.local/INFO/locust.runners: Stopping <span class="m">2</span> users
+<span class="o">[</span><span class="m">2020</span>-12-30 <span class="m">21</span>:43:03,027<span class="o">]</span> yourmachine.local/INFO/locust.runners: <span class="m">2</span> Users have been stopped, <span class="m">0</span> still running
+ Name                                                          <span class="c1"># reqs      # fails  |     Avg     Min     Max  Median  |   req/s failures/s</span>
+--------------------------------------------------------------------------------------------------------------------------------------------
+ POST /notes                                                        <span class="m">2</span>     <span class="m">0</span><span class="o">(</span><span class="m">0</span>.00%<span class="o">)</span>  <span class="p">|</span>      <span class="m">19</span>      <span class="m">14</span>      <span class="m">23</span>      <span class="m">15</span>  <span class="p">|</span>    <span class="m">0</span>.03    <span class="m">0</span>.00
+ GET /notes/1                                                    <span class="m">2806</span> <span class="m">2806</span><span class="o">(</span><span class="m">100</span>.00%<span class="o">)</span>  <span class="p">|</span>       <span class="m">4</span>       <span class="m">3</span>      <span class="m">17</span>       <span class="m">4</span>  <span class="p">|</span>   <span class="m">45</span>.28   <span class="m">45</span>.28
+ GET /notes/10                                                   <span class="m">2804</span> <span class="m">2804</span><span class="o">(</span><span class="m">100</span>.00%<span class="o">)</span>  <span class="p">|</span>       <span class="m">4</span>       <span class="m">3</span>      <span class="m">15</span>       <span class="m">4</span>  <span class="p">|</span>   <span class="m">45</span>.25   <span class="m">45</span>.25
+ GET /notes/2                                                    <span class="m">2806</span>     <span class="m">0</span><span class="o">(</span><span class="m">0</span>.00%<span class="o">)</span>  <span class="p">|</span>       <span class="m">4</span>       <span class="m">3</span>      <span class="m">12</span>       <span class="m">4</span>  <span class="p">|</span>   <span class="m">45</span>.28    <span class="m">0</span>.00
+ GET /notes/3                                                    <span class="m">2806</span>     <span class="m">0</span><span class="o">(</span><span class="m">0</span>.00%<span class="o">)</span>  <span class="p">|</span>       <span class="m">4</span>       <span class="m">3</span>      <span class="m">29</span>       <span class="m">4</span>  <span class="p">|</span>   <span class="m">45</span>.28    <span class="m">0</span>.00
+ GET /notes/4                                                    <span class="m">2806</span>     <span class="m">0</span><span class="o">(</span><span class="m">0</span>.00%<span class="o">)</span>  <span class="p">|</span>       <span class="m">4</span>       <span class="m">3</span>      <span class="m">13</span>       <span class="m">4</span>  <span class="p">|</span>   <span class="m">45</span>.28    <span class="m">0</span>.00
+ GET /notes/5                                                    <span class="m">2806</span>     <span class="m">0</span><span class="o">(</span><span class="m">0</span>.00%<span class="o">)</span>  <span class="p">|</span>       <span class="m">4</span>       <span class="m">3</span>      <span class="m">15</span>       <span class="m">4</span>  <span class="p">|</span>   <span class="m">45</span>.28    <span class="m">0</span>.00
+ GET /notes/6                                                    <span class="m">2805</span>    <span class="m">23</span><span class="o">(</span><span class="m">0</span>.82%<span class="o">)</span>  <span class="p">|</span>       <span class="m">4</span>       <span class="m">3</span>      <span class="m">10</span>       <span class="m">4</span>  <span class="p">|</span>   <span class="m">45</span>.26    <span class="m">0</span>.37
+ GET /notes/7                                                    <span class="m">2805</span> <span class="m">2805</span><span class="o">(</span><span class="m">100</span>.00%<span class="o">)</span>  <span class="p">|</span>       <span class="m">4</span>       <span class="m">3</span>      <span class="m">11</span>       <span class="m">4</span>  <span class="p">|</span>   <span class="m">45</span>.26   <span class="m">45</span>.26
+ GET /notes/8                                                    <span class="m">2804</span> <span class="m">2804</span><span class="o">(</span><span class="m">100</span>.00%<span class="o">)</span>  <span class="p">|</span>       <span class="m">4</span>       <span class="m">3</span>      <span class="m">15</span>       <span class="m">4</span>  <span class="p">|</span>   <span class="m">45</span>.25   <span class="m">45</span>.25
+ GET /notes/9                                                    <span class="m">2804</span> <span class="m">2804</span><span class="o">(</span><span class="m">100</span>.00%<span class="o">)</span>  <span class="p">|</span>       <span class="m">4</span>       <span class="m">3</span>      <span class="m">26</span>       <span class="m">4</span>  <span class="p">|</span>   <span class="m">45</span>.25   <span class="m">45</span>.25
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregated                                                     <span class="m">28054</span> <span class="m">14046</span><span class="o">(</span><span class="m">50</span>.07%<span class="o">)</span>  <span class="p">|</span>       <span class="m">4</span>       <span class="m">3</span>      <span class="m">29</span>       <span class="m">4</span>  <span class="p">|</span>  <span class="m">452</span>.69  <span class="m">226</span>.65
+
+Response <span class="nb">time</span> percentiles <span class="o">(</span>approximated<span class="o">)</span>
+ Type     Name                                                              <span class="m">50</span>%    <span class="m">66</span>%    <span class="m">75</span>%    <span class="m">80</span>%    <span class="m">90</span>%    <span class="m">95</span>%    <span class="m">98</span>%    <span class="m">99</span>%  <span class="m">99</span>.9% <span class="m">99</span>.99%   <span class="m">100</span>% <span class="c1"># reqs</span>
+--------<span class="p">|</span>------------------------------------------------------------<span class="p">|</span>---------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>
+ POST     /notes                                                             <span class="m">23</span>     <span class="m">23</span>     <span class="m">23</span>     <span class="m">23</span>     <span class="m">23</span>     <span class="m">23</span>     <span class="m">23</span>     <span class="m">23</span>     <span class="m">23</span>     <span class="m">23</span>     <span class="m">23</span>      <span class="m">2</span>
+ GET      /notes/1                                                            <span class="m">4</span>      <span class="m">4</span>      <span class="m">4</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">6</span>      <span class="m">7</span>     <span class="m">10</span>     <span class="m">17</span>     <span class="m">17</span>   <span class="m">2806</span>
+ GET      /notes/10                                                           <span class="m">4</span>      <span class="m">4</span>      <span class="m">4</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">6</span>      <span class="m">7</span>     <span class="m">12</span>     <span class="m">15</span>     <span class="m">15</span>   <span class="m">2804</span>
+ GET      /notes/2                                                            <span class="m">4</span>      <span class="m">4</span>      <span class="m">4</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">6</span>      <span class="m">7</span>     <span class="m">10</span>     <span class="m">13</span>     <span class="m">13</span>   <span class="m">2806</span>
+ GET      /notes/3                                                            <span class="m">4</span>      <span class="m">4</span>      <span class="m">4</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">6</span>      <span class="m">7</span>     <span class="m">12</span>     <span class="m">30</span>     <span class="m">30</span>   <span class="m">2806</span>
+ GET      /notes/4                                                            <span class="m">4</span>      <span class="m">4</span>      <span class="m">4</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">6</span>      <span class="m">6</span>     <span class="m">13</span>     <span class="m">14</span>     <span class="m">14</span>   <span class="m">2806</span>
+ GET      /notes/5                                                            <span class="m">4</span>      <span class="m">4</span>      <span class="m">4</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">6</span>      <span class="m">7</span>     <span class="m">14</span>     <span class="m">16</span>     <span class="m">16</span>   <span class="m">2806</span>
+ GET      /notes/6                                                            <span class="m">4</span>      <span class="m">4</span>      <span class="m">4</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">6</span>      <span class="m">7</span>      <span class="m">9</span>     <span class="m">11</span>     <span class="m">11</span>   <span class="m">2805</span>
+ GET      /notes/7                                                            <span class="m">4</span>      <span class="m">4</span>      <span class="m">4</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">6</span>      <span class="m">7</span>      <span class="m">9</span>     <span class="m">12</span>     <span class="m">12</span>   <span class="m">2805</span>
+ GET      /notes/8                                                            <span class="m">4</span>      <span class="m">4</span>      <span class="m">4</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">6</span>      <span class="m">7</span>     <span class="m">11</span>     <span class="m">16</span>     <span class="m">16</span>   <span class="m">2804</span>
+ GET      /notes/9                                                            <span class="m">4</span>      <span class="m">4</span>      <span class="m">4</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">6</span>      <span class="m">7</span>     <span class="m">10</span>     <span class="m">26</span>     <span class="m">26</span>   <span class="m">2804</span>
+--------<span class="p">|</span>------------------------------------------------------------<span class="p">|</span>---------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>------<span class="p">|</span>
+ None     Aggregated                                                          <span class="m">4</span>      <span class="m">4</span>      <span class="m">4</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">5</span>      <span class="m">6</span>      <span class="m">7</span>     <span class="m">10</span>     <span class="m">23</span>     <span class="m">30</span>  <span class="m">28054</span>
+
+Error report
+ <span class="c1"># occurrences      Error                                                                                               </span>
+--------------------------------------------------------------------------------------------------------------------------------------------
+ <span class="m">2806</span>               GET /notes/1: HTTPError<span class="o">(</span><span class="s1">&#39;404 Client Error: Not Found for url: http://localhost:5000/notes/1&#39;</span><span class="o">)</span>       
+ <span class="m">23</span>                 GET /notes/6: HTTPError<span class="o">(</span><span class="s1">&#39;404 Client Error: Not Found for url: http://localhost:5000/notes/6&#39;</span><span class="o">)</span>       
+ <span class="m">2805</span>               GET /notes/7: HTTPError<span class="o">(</span><span class="s1">&#39;404 Client Error: Not Found for url: http://localhost:5000/notes/7&#39;</span><span class="o">)</span>       
+ <span class="m">2804</span>               GET /notes/8: HTTPError<span class="o">(</span><span class="s1">&#39;404 Client Error: Not Found for url: http://localhost:5000/notes/8&#39;</span><span class="o">)</span>       
+ <span class="m">2804</span>               GET /notes/9: HTTPError<span class="o">(</span><span class="s1">&#39;404 Client Error: Not Found for url: http://localhost:5000/notes/9&#39;</span><span class="o">)</span>       
+ <span class="m">2804</span>               GET /notes/10: HTTPError<span class="o">(</span><span class="s1">&#39;404 Client Error: Not Found for url: http://localhost:5000/notes/10&#39;</span><span class="o">)</span>     
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+make: *** <span class="o">[</span>load_tests<span class="o">]</span> Error <span class="m">1</span>
+</code></pre></div>
+</td></tr></table>
+<hr />
+<h2 id="mkdocs">mkdocs<a class="headerlink" href="#mkdocs" title="Permanent link">&para;</a></h2>
+<p>This site hase been generated with the help of <a href="https://www.mkdocs.org">mkdocs.org</a> and the incredible theme (much more
+than that actually) <a href="https://squidfunk.github.io/mkdocs-material/">mkdocs-material</a>.</p>
+<h3 id="basics--mkdocs-commands">Basics : mkdocs Commands<a class="headerlink" href="#basics--mkdocs-commands" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
+<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
+<li><code>mkdocs build</code> - Build the documentation site.</li>
+<li><code>mkdocs -h</code> - Print help message and exit.</li>
+</ul>
+<h3 id="documentation--layout">Documentation : layout<a class="headerlink" href="#documentation--layout" title="Permanent link">&para;</a></h3>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>mkdocs.yml    # The configuration file.
+docs/
+    index.md  # The documentation homepage.
+    ...       # Other markdown pages, images and other files.
+</code></pre></div>
+</td></tr></table>
+<h3 id="run-documentation-server">Run documentation server<a class="headerlink" href="#run-documentation-server" title="Permanent link">&para;</a></h3>
+<p>You can use <code>make serve</code> to start the documentation server :</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>$ make serve
+INFO    -  Building documentation... 
+INFO    -  Cleaning site directory 
+INFO    -  Documentation built in <span class="m">0</span>.10 seconds 
+<span class="o">[</span>I <span class="m">201230</span> <span class="m">22</span>:19:08 server:335<span class="o">]</span> Serving on http://127.0.0.1:8000
+INFO    -  Serving on http://127.0.0.1:8000
+<span class="o">[</span>I <span class="m">201230</span> <span class="m">22</span>:19:08 handlers:62<span class="o">]</span> Start watching changes
+INFO    -  Start watching changes
+<span class="o">[</span>I <span class="m">201230</span> <span class="m">22</span>:19:08 handlers:64<span class="o">]</span> Start detecting changes
+INFO    -  Start detecting changes
+<span class="o">[</span>I <span class="m">201230</span> <span class="m">22</span>:19:11 handlers:135<span class="o">]</span> Browser Connected: http://127.0.0.1:8000/#objectives
+INFO    -  Browser Connected: http://127.0.0.1:8000/#objectives
+</code></pre></div>
+</td></tr></table>
+<p>You should see the documentation at <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a></p>
+<p><img alt="documentation" src="img/documentation.png" /></p>
+<hr />
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+        
+          <a href="about/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                About
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2020 <a href="https://twitter.com/vincedgy">Vincent DAGOURY</a>, Maintained by vincedgy
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/vincedgy" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/vincedgy" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://fr.linkedin.com/in/vincentdagoury" target="_blank" rel="noopener" title="fr.linkedin.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://www.youtube.com/c/VinceDgy" target="_blank" rel="noopener" title="www.youtube.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="assets/javascripts/vendor.08c56446.min.js"></script>
+      <script src="assets/javascripts/bundle.6ced434e.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: ".",
+          features: ['search.suggest', 'navigation.instant', 'navigation.sections'],
+          search: Object.assign({
+            worker: "assets/javascripts/worker/search.8c7e0a7e.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>
