@@ -1,5 +1,5 @@
 import sqlalchemy
-from sqlalchemy import MetaData
+from sqlalchemy import MetaData, func, text
 from sqlalchemy.engine import Engine
 
 from lib.db_utils import db_url
@@ -14,6 +14,7 @@ notes: sqlalchemy.sql.schema.Table = sqlalchemy.Table(
     "notes",
     metadata,
     sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
+    sqlalchemy.Column("created_at", sqlalchemy.DateTime(), server_default=text('NOW()')),
     sqlalchemy.Column("text", sqlalchemy.String(length=100)),
     sqlalchemy.Column("completed", sqlalchemy.Boolean),
 )

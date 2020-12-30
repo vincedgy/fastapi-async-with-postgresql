@@ -47,9 +47,9 @@ async def shutdown():
 @app.post("/notes", response_model=Note)
 async def create_note(note: NoteIn):
     """Create a note into the database and send back the created record's id"""
-    query = notes.insert()
-    values = {"text": note.text, "completed": note.completed}
-    last_record_id = await database.execute(query=query, values=values)
+    logger.info(f"Creating Note {note}")
+    query = notes.insert(values={"text": note.text, "completed": note.completed})
+    last_record_id = await database.execute(query=query)
     return {**note.dict(), "id": last_record_id}
 
 
@@ -75,7 +75,7 @@ async def delete_note(note_id: int):
     """Delete one note given its id"""
     query = notes.delete().where(notes.c.id == note_id)
     await database.execute(query=query)
-    return {}
+    return {"message": f"Note with id {note_id} has been deleted."}
 
 
 @app.get("/notes/all", response_model=List[Note])
