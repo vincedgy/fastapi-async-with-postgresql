@@ -1,0 +1,20 @@
+site_name: FastAPI with async and Postgresql
+site_url: https://vincedgy.github.io/first_mkdocs/
+
+repo_url: https://github.com/vincedgy/first_mkdocs
+edit_uri: tree/main/docs
+repo_name: GitHub
+
+nav:
+    - Home: index.md
+    - About: about.md
+theme:
+    name: readthedocs
+    extra_css:
+        - css/extra.css
+    highlightjs: true
+    hljs_languages:
+        - yaml
+        - python
+        - shell
+        - sql
