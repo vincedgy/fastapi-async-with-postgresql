@@ -9,13 +9,19 @@ from lib.db_utils import database
 from lib.models import Note, NoteIn
 from lib.schema import notes
 from lib.utils import get_logger
+import os
 
 logger = get_logger(name='main')
 
 # Defines the API
+path = os.path.dirname(__file__)
+with open(f'{path}/API_description.md') as api_description_file:
+    app = FastAPI(
+        title="Notes REST API",
+        version="0.1.0",
+        description=str(api_description_file.read()),
 
-app = FastAPI(
-    title="REST API that serves asyncio Posgresql datas with async Endpoints")
+    )
 
 app.add_middleware(
     CORSMiddleware,
@@ -88,7 +94,7 @@ async def get_notes(skip: int = 0, take: int = 20):
     return rows
 
 
-@app.get("/notes/{note_id}", response_model=Note)
+@app.get("/notes/{note_id}", response_model=Note, description="Fetch one Note given the note_id")
 async def get_one_note_by_id(note_id: int):
     """Fetch one Note given the note_id"""
     query = notes.select().where(text(f"id={note_id}"))

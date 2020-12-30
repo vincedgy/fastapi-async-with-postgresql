@@ -4,10 +4,11 @@
 
 ## Objectives
 
-The main goal of this little demonstration project is to explore [FastAPI](https://fastapi.tiangolo.com/) framework
-NOT using [asyncio](https://docs.python.org/3/library/asyncio.html) but a higher level abstraction.
+The main goal of this little demonstration project is to explore [FastAPI](https://fastapi.tiangolo.com/) framework NOT
+using [asyncio](https://docs.python.org/3/library/asyncio.html) but a higher level abstraction.
 
-This project is very much inspired by the very framework used tutorial named ['databases'](https://pypi.org/project/databases/)
+This project is very much inspired by the very framework used tutorial
+named ['databases'](https://pypi.org/project/databases/)
 which gives asyncio support for a range of SQL databases.
 
 The documentation can be find [here](https://www.encode.io/databases/).
@@ -21,26 +22,24 @@ The code hase been developed and tested with Python 3.9.1. It is probably ok wit
 Package manager :
 
 - [Poetry](https://python-poetry.org/)
-  
+
 Used main libraries :
 
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [uvicorn](https://www.uvicorn.org/)
-- [pydantic](https://pydantic-docs.helpmanual.io/)  
+- [pydantic](https://pydantic-docs.helpmanual.io/)
 - [Databases](https://pypi.org/project/databases/)
 - [colorama](https://pypi.org/project/colorama/)
 
-
-Obviously you'll need a postgresql database, but we will have some help with docker.
+Obviously you'll need a postgresql database, but we will have some help with docker if you don't have postgresql 9+
+installed locally on your machine.
 
 We'll be using [locust](https://locust.io) for performance/load testing.
-
-
 
 ## Installation dependencies
 
 ```shell
-cd lib
+cd lib  
 python3 -m poetry install
 ```
 
@@ -50,15 +49,13 @@ Then activate the shell
 python3 -m poetry shell
 ```
 
-## Install Postgresql
+## Run Postgresql with Docker
 
 For this we use docker (choose the appropriate docker desktop for you local OS) with the help of docker-compose.
 
 Please refer to the official documentation of docker and docker-compose for your environment.
 
-
 Launch the docker-compose stack like so :
-
 
 ```shell
 $ docker-compose up -d
@@ -66,7 +63,7 @@ Starting fastapi-async-with-postgresql_adminer_1 ... done
 Recreating fastapi-async-with-postgresql_db_1    ... done
 ```
 
-Checkout if the stack is up and running
+You can check if the stack is up and running :
 
 ```shell
 $ docker-compose ps
@@ -76,7 +73,7 @@ fastapi-async-with-postgresql_adminer_1   entrypoint.sh docker-php-e ...   Up   
 fastapi-async-with-postgresql_db_1        docker-entrypoint.sh postgres    Up      0.0.0.0:5432->5432/tcp
 ```
 
-From this point you should be able to log on your database with the help of psql also with docker : 
+From this point you should be able to log on your database with the help of psql also with docker :
 
 ```shell
 $ docker run -it --rm --network fastapi-async-with-postgresql_default postgres psql -h db -U vincent -d dev
@@ -103,7 +100,6 @@ dev=# \l
 ## Run the server
 
 Using poetry runner
-
 
 ```shell
 $ cd src
@@ -182,7 +178,6 @@ The project uses [locust](https://locust.io) with a single load test file that y
 
 ![locust]
 
-
 ```shell
 $ cd src
 $ poetry run locust -f ../locust/locustfile.py
@@ -195,20 +190,17 @@ $ poetry run locust -f ../locust/locustfile.py
 
 You're invited to open the given http://0.0.0.0:8089
 
-Then you should be able to input a setting 
+Then you should be able to input a setting
 
 ![locust dialog]
-
 
 The test begins when you hit the button :
 
 ![locust test tab]
 
-
 You find charts that show the global performance all along tht test
 
 ![locust charts]
-
 
 After a few minutes you should get something like this
 
@@ -219,8 +211,13 @@ After a few minutes you should get something like this
 # Thanks !
 
 [adminer]: resources/adminer.png
+
 [locust]: resources/locust_logo.png
+
 [locust dialog]: resources/locust_dialog.png
+
 [locust test tab]: resources/locust_launch_tab.png
+
 [locust charts]: resources/locust_charts.png
+
 [locust charts 2]: resources/locust_charts_2.png
