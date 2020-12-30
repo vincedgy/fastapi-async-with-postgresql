@@ -62,8 +62,8 @@ start: do_start
 run:
 	@poetry run python src/main.py
 
-tests: install
-	@poetry run pytest
+tests:
+	@poetry run pytest -sv
 
 serve:
 	@poetry run mkdocs serve
