@@ -2,7 +2,8 @@
 
 > Author : @vincedgy
 
-This documentation uses [mkdocs.org](https://www.mkdocs.org).
+This documentation uses the excellent `mkdocs` static website for technica documentation that you can find
+at [mkdocs.org](https://www.mkdocs.org).
 
 ---
 
@@ -12,19 +13,17 @@ The main goal of this little demonstration project is to explore [FastAPI](https
 using [asyncio](https://docs.python.org/3/library/asyncio.html) WITH a higher level abstraction
 named [databases](https://pypi.org/project/databases/).
 
-This project is very much inspired by the tutorial of the framework itself
-taht you can find at ['databases' QuickStart](https://www.encode.io/databases/#quickstart)
+This project is very much inspired by the tutorial of the framework itself taht you can find
+at ['databases' QuickStart](https://www.encode.io/databases/#quickstart)
 which gives asyncio support for a range of SQL databases.
 
 Enjoy 🍺 !
-
 
 !!! Note
 
     If you are installing Python on Windows, be sure to check the box to have
     Python added to your PATH if the installer offers such an option (it's
     normally off by default).
-
 
 ---
 
@@ -34,11 +33,13 @@ The code hase been developed and tested with Python 3.9.1. It is probably ok wit
 
 - [Python 3.9+](https://python.org)
 
-Package manager :
+### Package manager
 
-- [Poetry](https://python-poetry.org/)
+this project use [Poetry](https://python-poetry.org/).
 
-Used main libraries :
+It handles dependencies management, locking version and publishing to pypi automagically.
+
+### Main libraries
 
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [uvicorn](https://www.uvicorn.org/)
@@ -51,10 +52,53 @@ installed locally on your machine.
 
 We'll be using [locust](https://locust.io) for performance/load testing.
 
-## Installation dependencies
+
+--- 
+
+## Automation with Makefile
+
+A `Makefile` automates all common commands for you.
+
+You'll find description of every command by typing `make help`.
+
+```shell
+Wed Dec 30 21:58:56 CET 2020
+                                   
+   __  __     ______     __         ______    
+  /\ \_\ \   /\  ___\   /\ \       /\  == \   
+  \ \  __ \  \ \  __\   \ \ \____  \ \  _-/   
+   \ \_\ \_\  \ \_____\  \ \_____\  \ \_\     
+    \/_/\/_/   \/_____/   \/_____/   \/_/     
+
+---------------HELP------------------------------------
+- Setup the project              : make install
+- Run the server (blocking)      : make start
+- Evaluate status of the server  : make status
+- Stop (kill) the server         : make kill
+- Tail the current log file      : make tail
+- Run tests on a running server  : make tests
+- Run tests on a running server  : make load_tests
+- Launch mkdocs server Run       : make serve
+- Publish docs GitHub pages      : make publish
+--------------------------------------------------------
+Enjoy 🍺 !
+
+```
+
+---
+
+## Install dependencies
+
+Using poetry its :
 
 ```shell
 python3 -m poetry install
+```
+
+Using Makefile commands
+
+```shell
+make install
 ```
 
 Then activate the shell
@@ -63,11 +107,18 @@ Then activate the shell
 python3 -m poetry shell
 ```
 
+----
+
 ## Run Postgresql with Docker
 
-For this we use docker (choose the appropriate docker desktop for you local OS) with the help of docker-compose.
+If you don't have a local postgresql instance on your machine you can use the provided `docker-compose` stack.
 
-Please refer to the official documentation of docker and docker-compose for your environment.
+Of course, you'll need to choose the appropriate docker installation (docker desktop for you local OS) and install
+the `docker-compose` utility tool as well
+
+!!! Note
+
+    Please refer to the official documentations of `docker` and `docker-compose` for your environment.
 
 ### Launch docker-compose
 
@@ -236,6 +287,8 @@ INFO:     Stopping reloader process [8791]
 
 ```
 
+---
+
 ## Test the server
 
 You can use curl or whatever client for REST API
@@ -266,6 +319,47 @@ content-type: application/json
 [{"id":1,"text":"Test","completed":false}]%
 ```
 
+---
+
+## Run integration tests
+
+Once you have your database up and running you should be able to launche all the test with one command with the help of
+the Makefile command `make tests`.
+
+```shell
+    make tests
+    ===================================================================================== test session starts ======================================================================================
+    platform darwin -- Python 3.9.1, pytest-5.4.3, py-1.10.0, pluggy-0.13.1 -- /Users/vdagoury/Library/Caches/pypoetry/virtualenvs/api-sK0lnS2G-py3.9/bin/python
+    cachedir: .pytest_cache
+    rootdir: /Users/vdagoury/Projects/Python/asynchronous/fastapi-async-with-postgresql
+    collected 11 items                                                                                                                                                                             
+    
+    src/tests/test_api.py::test_version PASSED
+    src/tests/test_api.py::test_create_note PASSED
+    src/tests/test_api.py::test_known_note PASSED
+    src/tests/test_api.py::test_get_all_notes PASSED
+    src/tests/test_api.py::test_update_note PASSED
+    src/tests/test_api.py::test_get_notes PASSED
+    src/tests/test_api.py::test_get_notes_with_pagination [{'id': 1, 'text': 'test', 'completed': False}]
+    PASSED
+    src/tests/test_api.py::test_delete_note PASSED
+    src/tests/test_api.py::test_unknown_note PASSED
+    src/tests/test_api.py::test_create_another_note PASSED
+    src/tests/test_api.py::test_get_one_note PASSED
+    
+    ====================================================================================== 11 passed in 0.18s ======================================================================================
+
+```
+
+!!! Note
+
+    You may need to drop the table with `drop table notes;` 
+    in order to find proper starting conditions for integration tests.
+
+    I probably need to go further for initial state creation for this integrations tests. 
+
+---
+
 ## Run load tests
 
 The project uses [locust](https://locust.io) with a single load test file that you can easily update.
@@ -273,8 +367,7 @@ The project uses [locust](https://locust.io) with a single load test file that y
 ![locust]
 
 ```shell
-cd src
-poetry run locust -f ../locust/locustfile.py
+make load_tests
 [2020-12-29 21:55:19,670] yourmachine.local/INFO/locust.main: Starting web interface at http://0.0.0.0:8089 (accepting connections from all network interfaces)
 [2020-12-29 21:55:19,678] yourmachine.local/INFO/locust.main: Starting Locust 1.4.1
 [2020-12-29 21:56:09,048] yourmachine.local/INFO/locust.runners: Spawning 10 users at the rate 2 users/s (0 users already running)...
@@ -284,7 +377,7 @@ poetry run locust -f ../locust/locustfile.py
 
 You're invited to open the given http://0.0.0.0:8089
 
-Then you should be able to input a setting
+Then you should be able to input a setting.
 
 ![locust dialog]
 
@@ -299,6 +392,68 @@ You find charts that show the global performance all along tht test
 After a few minutes you should get something like this
 
 ![locust charts 2]
+
+You can stop the load testing by pressing Ctrl+C which will give you an output on the temrinal like this one :
+
+```shell
+[...]
+2020-12-30T20:43:03Z <Greenlet at 0x1117bf6a0: run_user(<locustfile.QuickstartUser object at 0x111817ca0>)> failed with KeyboardInterrupt
+
+[2020-12-30 21:43:03,026] yourmachine.local/INFO/locust.main: Running teardowns...
+[2020-12-30 21:43:03,026] yourmachine.local/INFO/locust.main: Shutting down (exit code 1), bye.
+[2020-12-30 21:43:03,026] yourmachine.local/INFO/locust.main: Cleaning up runner...
+[2020-12-30 21:43:03,026] yourmachine.local/INFO/locust.runners: Stopping 2 users
+[2020-12-30 21:43:03,027] yourmachine.local/INFO/locust.runners: 2 Users have been stopped, 0 still running
+ Name                                                          # reqs      # fails  |     Avg     Min     Max  Median  |   req/s failures/s
+--------------------------------------------------------------------------------------------------------------------------------------------
+ POST /notes                                                        2     0(0.00%)  |      19      14      23      15  |    0.03    0.00
+ GET /notes/1                                                    2806 2806(100.00%)  |       4       3      17       4  |   45.28   45.28
+ GET /notes/10                                                   2804 2804(100.00%)  |       4       3      15       4  |   45.25   45.25
+ GET /notes/2                                                    2806     0(0.00%)  |       4       3      12       4  |   45.28    0.00
+ GET /notes/3                                                    2806     0(0.00%)  |       4       3      29       4  |   45.28    0.00
+ GET /notes/4                                                    2806     0(0.00%)  |       4       3      13       4  |   45.28    0.00
+ GET /notes/5                                                    2806     0(0.00%)  |       4       3      15       4  |   45.28    0.00
+ GET /notes/6                                                    2805    23(0.82%)  |       4       3      10       4  |   45.26    0.37
+ GET /notes/7                                                    2805 2805(100.00%)  |       4       3      11       4  |   45.26   45.26
+ GET /notes/8                                                    2804 2804(100.00%)  |       4       3      15       4  |   45.25   45.25
+ GET /notes/9                                                    2804 2804(100.00%)  |       4       3      26       4  |   45.25   45.25
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregated                                                     28054 14046(50.07%)  |       4       3      29       4  |  452.69  226.65
+
+Response time percentiles (approximated)
+ Type     Name                                                              50%    66%    75%    80%    90%    95%    98%    99%  99.9% 99.99%   100% # reqs
+--------|------------------------------------------------------------|---------|------|------|------|------|------|------|------|------|------|------|------|
+ POST     /notes                                                             23     23     23     23     23     23     23     23     23     23     23      2
+ GET      /notes/1                                                            4      4      4      5      5      5      6      7     10     17     17   2806
+ GET      /notes/10                                                           4      4      4      5      5      5      6      7     12     15     15   2804
+ GET      /notes/2                                                            4      4      4      5      5      5      6      7     10     13     13   2806
+ GET      /notes/3                                                            4      4      4      5      5      5      6      7     12     30     30   2806
+ GET      /notes/4                                                            4      4      4      5      5      5      6      6     13     14     14   2806
+ GET      /notes/5                                                            4      4      4      5      5      5      6      7     14     16     16   2806
+ GET      /notes/6                                                            4      4      4      5      5      5      6      7      9     11     11   2805
+ GET      /notes/7                                                            4      4      4      5      5      5      6      7      9     12     12   2805
+ GET      /notes/8                                                            4      4      4      5      5      5      6      7     11     16     16   2804
+ GET      /notes/9                                                            4      4      4      5      5      5      6      7     10     26     26   2804
+--------|------------------------------------------------------------|---------|------|------|------|------|------|------|------|------|------|------|------|
+ None     Aggregated                                                          4      4      4      5      5      5      6      7     10     23     30  28054
+
+Error report
+ # occurrences      Error                                                                                               
+--------------------------------------------------------------------------------------------------------------------------------------------
+ 2806               GET /notes/1: HTTPError('404 Client Error: Not Found for url: http://localhost:5000/notes/1')       
+ 23                 GET /notes/6: HTTPError('404 Client Error: Not Found for url: http://localhost:5000/notes/6')       
+ 2805               GET /notes/7: HTTPError('404 Client Error: Not Found for url: http://localhost:5000/notes/7')       
+ 2804               GET /notes/8: HTTPError('404 Client Error: Not Found for url: http://localhost:5000/notes/8')       
+ 2804               GET /notes/9: HTTPError('404 Client Error: Not Found for url: http://localhost:5000/notes/9')       
+ 2804               GET /notes/10: HTTPError('404 Client Error: Not Found for url: http://localhost:5000/notes/10')     
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+make: *** [load_tests] Error 1
+
+
+```
+
+---
 
 ## mkdocs
 

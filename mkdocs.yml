@@ -10,7 +10,7 @@ nav:
     - Home: index.md
     - About: about.md
 theme:
-    name: mkdocs
+    name: readthedocs
     extra_css:
         - css/extra.css
     highlightjs: true
