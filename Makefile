@@ -25,23 +25,24 @@ endif
 # The @ makes sure that the command itself isn't echoed in the terminal
 help:
 	@date
-	@echo "                                   \n\
-   __  __     ______     __         ______    \n\
-  /\ \_\ \   /\  ___\   /\ \       /\  == \   \n\
-  \ \  __ \  \ \  __\   \ \ \____  \ \  _-/   \n\
-   \ \_\ \_\  \ \_____\  \ \_____\  \ \_\     \n\
-    \/_/\/_/   \/_____/   \/_____/   \/_/     \n"
-	@echo "---------------HELP------------------------------------"
-	@echo "- Setup the project              : make install"
-	@echo "- Run the server (blocking)      : make start"
-	@echo "- Evaluate status of the server  : make status"
-	@echo "- Stop (kill) the server         : make kill"
-	@echo "- Tail the current log file      : make tail"
-	@echo "- Run tests on a running server  : make tests"
-	@echo "- Run tests on a running server  : make load_tests"
-	@echo "- Launch mkdocs server Run       : make serve"
-	@echo "- Publish docs GitHub pages      : make publish"
-	@echo "--------------------------------------------------------"
+	@echo "#                                   \n\
+#   __  __     ______     __         ______    \n\
+#  /\ \_\ \   /\  ___\   /\ \       /\  == \   \n\
+#  \ \  __ \  \ \  __\   \ \ \____  \ \  _-/   \n\
+#   \ \_\ \_\  \ \_____\  \ \_____\  \ \_\     \n\
+#    \/_/\/_/   \/_____/   \/_____/   \/_/     \n\
+#                                                 "
+	@echo "# ---------------HELP------------------------------------"
+	@echo "# - Setup the project              : make install"
+	@echo "# - Run the server (blocking)      : make start"
+	@echo "# - Evaluate status of the server  : make status"
+	@echo "# - Stop (kill) the server         : make kill"
+	@echo "# - Tail the current log file      : make tail"
+	@echo "# - Run tests on a running server  : make tests"
+	@echo "# - Run tests on a running server  : make load_tests"
+	@echo "# - Launch mkdocs server Run       : make serve"
+	@echo "# - Publish docs GitHub pages      : make publish"
+	@echo "# --------------------------------------------------------"
 	@echo Enjoy 🍺 !
 
 install:

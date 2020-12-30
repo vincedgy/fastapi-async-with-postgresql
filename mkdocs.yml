@@ -10,29 +10,54 @@ nav:
     - Home: index.md
     - About: about.md
 theme:
-    name: readthedocs
-    extra_css:
-        - css/extra.css
-    highlightjs: true
-    hljs_languages:
-        - yaml
-        - python
-        - shell
-        - sql
+  name: material
+  features:
+    #- header.autohide
+    - search.suggest
+    - navigation.instant
+    - navigation.sections
+  palette:
+    scheme: preference
+    accent: orange
+  highlightjs: true
+  hljs_languages:
+    - python
+    - shell
 
 extra_css:
     - css/extra.css
 
 markdown_extensions:
     - toc:
-        permalink: 
+        permalink: true
+        slugify: !!python/name:pymdownx.slugs.uslugify
     - admonition
+    - pymdownx.details
+    - pymdownx.tasklist
+    - pymdownx.emoji:
+          emoji_index: !!python/name:materialx.emoji.twemoji
+          emoji_generator: !!python/name:materialx.emoji.to_svg
+    - pymdownx.superfences
+    - pymdownx.highlight:
+          linenums: true
     - def_list
+    - attr_list
     - mdx_gh_links:
         user: mkdocs
         repo: mkdocs
 
 copyright: Copyright &copy; 2020 <a href="https://twitter.com/vincedgy">Vincent DAGOURY</a>, Maintained by vincedgy
+
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/vincedgy
+    - icon: fontawesome/brands/github
+      link: https://github.com/vincedgy
+    - icon: fontawesome/brands/linkedin
+      link: https://fr.linkedin.com/in/vincentdagoury
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/c/VinceDgy
 
 plugins:
     - search

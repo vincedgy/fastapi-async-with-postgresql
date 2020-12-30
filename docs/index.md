@@ -5,21 +5,24 @@
 !!! Note
 
     This documentation uses the excellent `mkdocs` technical documentation static website generator that you can find
-    at [mkdocs.org](https://www.mkdocs.org).
+    at [mkdocs.org](https://www.mkdocs.org). See more [here](#mkdocs)
 
 You'll find the repository
 at [https://github.com/vincedgy/fastapi-async-with-postgresql](https://github.com/vincedgy/fastapi-async-with-postgresql)
+
+Let's do this :rocket:
+
 
 
 ---
 
 ## Objectives
 
-The main goal of this little demonstration project is to explore [FastAPI](https://fastapi.tiangolo.com/) framework
+The main goal of this little demonstration project is to explore [FastAPI](https://fastapi.tiangolo.com/) :octicons-heart-fill-24:{: .heart } framework
 using [asyncio](https://docs.python.org/3/library/asyncio.html) WITH a higher level abstraction
-named [databases](https://pypi.org/project/databases/).
+named [databases](https://pypi.org/project/databases/) connected to a SQL (not async io by nature) PostgreSQL database.
 
-This project is very much inspired by the tutorial of the framework itself taht you can find
+This project is very much inspired by the tutorial of the ***databases*** framework itself that you can find
 at ['databases' QuickStart](https://www.encode.io/databases/#quickstart)
 which gives asyncio support for a range of SQL databases.
 
@@ -30,6 +33,21 @@ Enjoy 🍺 !
     If you are installing Python on Windows, be sure to check the box to have
     Python added to your PATH if the installer offers such an option (it's
     normally off by default).
+
+## Things I consider...
+
+I should do in the future :
+
+- [ ] : Make a proper Docker file and puch it to the Cloud
+- [ ] : Have a look at [asyncpg](https://github.com/magicstack/asyncpg)
+- [ ] : Make this project work on [cockroach](https://www.cockroachlabs.com/db/cockroachdb) database instead of
+  Postgresql
+- [ ] : Add a light [Flask](https://flask.palletsprojects.com/en/1.1.x/) FrontEnd with [svelte](https://svelte.dev)
+  FrontEnd, for REST API interactions
+- [ ] : Checkout the excellent [https://github.com/vinta/awesome-python](https://github.com/vinta/awesome-python) for
+  more inspiration.
+
+:smile:
 
 ---
 
@@ -78,25 +96,25 @@ You'll find description of every command by typing `make help`.
 
 ```shell
 $ make help
-Wed Dec 30 21:58:56 CET 2020
-                                   
-   __  __     ______     __         ______    
-  /\ \_\ \   /\  ___\   /\ \       /\  == \   
-  \ \  __ \  \ \  __\   \ \ \____  \ \  _-/   
-   \ \_\ \_\  \ \_____\  \ \_____\  \ \_\     
-    \/_/\/_/   \/_____/   \/_____/   \/_/     
-
----------------HELP------------------------------------
-- Setup the project              : make install
-- Run the server (blocking)      : make start
-- Evaluate status of the server  : make status
-- Stop (kill) the server         : make kill
-- Tail the current log file      : make tail
-- Run tests on a running server  : make tests
-- Run tests on a running server  : make load_tests
-- Launch mkdocs server Run       : make serve
-- Publish docs GitHub pages      : make publish
---------------------------------------------------------
+Wed Dec 30 23:35:52 CET 2020
+#                                   
+#   __  __     ______     __         ______    
+#  /\ \_\ \   /\  ___\   /\ \       /\  == \   
+#  \ \  __ \  \ \  __\   \ \ \____  \ \  _-/   
+#   \ \_\ \_\  \ \_____\  \ \_____\  \ \_\     
+#    \/_/\/_/   \/_____/   \/_____/   \/_/     
+#                                                 
+# ---------------HELP------------------------------------
+# - Setup the project              : make install
+# - Run the server (blocking)      : make start
+# - Evaluate status of the server  : make status
+# - Stop (kill) the server         : make kill
+# - Tail the current log file      : make tail
+# - Run tests on a running server  : make tests
+# - Run tests on a running server  : make load_tests
+# - Launch mkdocs server Run       : make serve
+# - Publish docs GitHub pages      : make publish
+# --------------------------------------------------------
 Enjoy 🍺 !
 
 ```
@@ -203,8 +221,6 @@ Adminer will display the content of the "notes" table that the project uses.
 ## Run the server
 
 You can start the server with `make run`
-
-If you had activate poetry shell you should be able to launch the server with
 
 ```shell
 $ make run
@@ -337,8 +353,8 @@ You can use curl or whatever client for REST API
 
 Create a Note :
 
-```shell
-curl -i -X POST http://localhost:5000/notes --data "{\"text\":\"Test\",\"completed\":\"false\"}"
+```bash
+$ curl -i -X POST http://localhost:5000/notes --data "{\"text\":\"Test\",\"completed\":\"false\"}"
 HTTP/1.1 200 OK
 date: Tue, 29 Dec 2020 20:25:46 GMT
 server: uvicorn
@@ -499,7 +515,11 @@ make: *** [load_tests] Error 1
 
 ## mkdocs
 
-### Documentation : mkdocs Commands
+This site hase been generated with the help of [mkdocs.org](https://www.mkdocs.org) and the incredible theme (much more
+than that actually) [mkdocs-material](https://squidfunk.github.io/mkdocs-material/).
+
+
+### Basics : mkdocs Commands
 
 * `mkdocs new [dir-name]` - Create a new project.
 * `mkdocs serve` - Start the live-reloading docs server.
@@ -551,7 +571,7 @@ You should see the documentation at [http://127.0.0.1:8000](http://127.0.0.1:800
 
 [locust charts]: img/locust_charts.png
 
-[locust charts 2]: img/locust_charts_2.png}
+[locust charts 2]: img/locust_charts_2.png
 
 [openapi]: img/openapi.png
 

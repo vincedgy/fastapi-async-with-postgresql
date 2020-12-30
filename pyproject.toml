@@ -13,6 +13,9 @@ databases = {extras = ["postgresql"], version = "^0.4.1"}
 psycopg2-binary = "^2.8.6"
 mkdocs = "^1.1.2"
 mdx_gh_links = "^0.2"
+pymdown-extensions = "^8.1"
+Pygments = "^2.7.3"
+mkdocs-material = "^6.2.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
