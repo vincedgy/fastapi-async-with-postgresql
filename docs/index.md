@@ -4,6 +4,8 @@
 
 This documentation uses [mkdocs.org](https://www.mkdocs.org).
 
+---
+
 ## Objectives
 
 The main goal of this little demonstration project is to explore [FastAPI](https://fastapi.tiangolo.com/) framework
@@ -15,6 +17,14 @@ taht you can find at ['databases' QuickStart](https://www.encode.io/databases/#q
 which gives asyncio support for a range of SQL databases.
 
 Enjoy 🍺 !
+
+
+!!! Note
+
+    If you are installing Python on Windows, be sure to check the box to have
+    Python added to your PATH if the installer offers such an option (it's
+    normally off by default).
+
 
 ---
 
@@ -115,6 +125,8 @@ You should open the url http://localhost:8080/?pgsql=db&username=vincent&db=vinc
 and see the content of the "notes" table.
 
 ![adminer]
+
+---
 
 ## Run the server
 

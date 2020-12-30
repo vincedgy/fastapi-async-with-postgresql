@@ -1,7 +1,6 @@
 site_name: FastAPI with async and Postgresql
 site_url: https://vincedgy.github.io/fastapi-async-with-postgresql/
 site_author: vincedgy
-copyright: MIT
 
 repo_url: https://github.com/vincedgy/fastapi-async-with-postgresql
 edit_uri: tree/main/docs
@@ -20,3 +19,20 @@ theme:
         - python
         - shell
         - sql
+
+extra_css:
+    - css/extra.css
+
+markdown_extensions:
+    - toc:
+        permalink: 
+    - admonition
+    - def_list
+    - mdx_gh_links:
+        user: mkdocs
+        repo: mkdocs
+
+copyright: Copyright &copy; 2020 <a href="https://twitter.com/vincedgy">Vincent DAGOURY</a>, Maintained by vincedgy
+
+plugins:
+    - search
